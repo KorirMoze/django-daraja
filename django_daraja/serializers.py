@@ -1,8 +1,8 @@
 from rest_framework import serializers
 
-from .models import Hero
+from .models import Hro
 
 class HeroSerializer(serializers.ModelSerializer):
     class Meta:
-        model = Hero
-        fields = ('phone_number', 'service_code','session_id','text')
+        model = Hro
+        fields = ('phoneNumber', 'serviceCode','sessionID','text')

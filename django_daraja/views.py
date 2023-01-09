@@ -7,11 +7,12 @@ from django.views.generic import View
 from django_daraja.mpesa.core import MpesaClient
 from decouple import config
 from datetime import datetime
+from rest_framework import status
 from .serializers import HeroSerializer
+from rest_framework.response import Response
 from rest_framework import viewsets
 from rest_framework.decorators import api_view,action
-from rest_framework.parsers import JSONParser
-from .models import Hero
+from .models import Hro
 cl = MpesaClient()
 stk_push_callback_url = 'https://api.darajambili.com/express-payment'
 b2c_callback_url = 'https://api.darajambili.com/b2c/result'
@@ -25,9 +26,10 @@ price = ''
 fm = ''
 global phone_number
 @csrf_exempt
+@api_view(['GET', 'POST'])
 def HeroViewSet(request):
     if request.method == 'GET':
-        heros = Hero.objects.all()
+        heros = Hro.objects.all()
         serializer = HeroSerializer(heros,many=True)
         return JsonResponse(serializer.data, safe=False)
         # p=len(queryset)
@@ -36,29 +38,37 @@ def HeroViewSet(request):
 
     
     elif request.method == 'POST':
-        data = JSONParser().parse(request)
-        serializer = HeroSerializer(data=data)
-        if serializer.is_valid():
-            serializer.save()
-            return JsonResponse(serializer.data, status=201)
-        return JsonResponse(serializer.errors, status=400)
-
- 
-
-
-@csrf_exempt
-def index(request):
-    global price
-    global fm
-    if request.method == 'POST':
-        session_id = request.POST.get('sessionId')
-        service_code = request.POST.get('serviceCode')
-        phone_number = request.POST.get('phoneNumber')
+        serializer = data=request.data
+        print(serializer)
+        phone_number = serializer.get("phoneNumber")
+        session_id = serializer.get("sessionid")
+        service_code = serializer.get("serviceCode")
+        text = serializer.get("text")
         print(phone_number)
-        fomated_no = phone_number.split('+')
-        fm = fomated_no[1]
+
+        # if serializer.is_valid():
+        #     # serializer.save()
+            
+            
+        #     # x = serializer.get("phone_number")
+        #     print(serializer)
+
+            
+        #     return Response(serializer.data, status=status.HTTP_201_CREATED)
+        # return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
+      
+
+
+
+   
+        # session_id = request.POST.get('sessionId')
+        # # service_code = request.POST.get('serviceCode')
+        # # phone_number = request.POST.get('phoneNumber')
+        # print(phone_number)
+        # fomated_no = phone_number.split('+')
+        # fm = fomated_no[1]
         
-        text = request.POST.get('text')
+        # text = request.POST.get('text')
 
         if text == '':
             response = "CON Main menu\n"
@@ -305,7 +315,7 @@ def stk_push_success(request):
     global fm
     print(price)
     phone_number = phone_number
-    amount = price
+    amount = 100
     account_reference = 'Glownet Solutions'
     transaction_desc = 'STK Push Description'
     callback_url = stk_push_callback_url
