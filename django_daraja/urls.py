@@ -1,5 +1,10 @@
 from django.urls import path , include
+from rest_framework import routers
 from . import views
+
+
+router = routers.DefaultRouter()
+router.register(r'heroes', views.HeroViewSet)
 
 test_patterns = [
 	path('', views.index, name='django_daraja_index'),
@@ -13,5 +18,7 @@ test_patterns = [
 urlpatterns = [
 	path('', views.index, name='index'),
 	path('tests/', include(test_patterns)),
+	path('api/', include(router.urls)),
+    path('api-auth/', include('rest_framework.urls', namespace='rest_framework'))
 ]
 

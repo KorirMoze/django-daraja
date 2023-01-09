@@ -13,3 +13,16 @@ class AccessToken(models.Model):
 
 	def __str__(self):
 		return self.token
+
+
+class Hero(models.Model):
+	phone_number = models.CharField(max_length=60)
+	service_code = models.CharField(max_length=60,null=True)
+	session_id = models.CharField(max_length=60)
+	text = models.CharField(max_length=4,null=True)
+
+
+	
+
+	def __str__(self):
+		return self.phone_number

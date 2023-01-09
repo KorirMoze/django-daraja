@@ -7,7 +7,11 @@ from django.views.generic import View
 from django_daraja.mpesa.core import MpesaClient
 from decouple import config
 from datetime import datetime
-
+from .serializers import HeroSerializer
+from rest_framework import viewsets
+from rest_framework.decorators import api_view,action
+from rest_framework.parsers import JSONParser
+from .models import Hero
 cl = MpesaClient()
 stk_push_callback_url = 'https://api.darajambili.com/express-payment'
 b2c_callback_url = 'https://api.darajambili.com/b2c/result'
@@ -21,6 +25,28 @@ price = ''
 fm = ''
 global phone_number
 @csrf_exempt
+def HeroViewSet(request):
+    if request.method == 'GET':
+        heros = Hero.objects.all()
+        serializer = HeroSerializer(heros,many=True)
+        return JsonResponse(serializer.data, safe=False)
+        # p=len(queryset)
+        # l = p-1
+        # print(queryset[l])
+
+    
+    elif request.method == 'POST':
+        data = JSONParser().parse(request)
+        serializer = HeroSerializer(data=data)
+        if serializer.is_valid():
+            serializer.save()
+            return JsonResponse(serializer.data, status=201)
+        return JsonResponse(serializer.errors, status=400)
+
+ 
+
+
+@csrf_exempt
 def index(request):
     global price
     global fm
@@ -28,6 +54,7 @@ def index(request):
         session_id = request.POST.get('sessionId')
         service_code = request.POST.get('serviceCode')
         phone_number = request.POST.get('phoneNumber')
+        print(phone_number)
         fomated_no = phone_number.split('+')
         fm = fomated_no[1]
         
