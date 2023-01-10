@@ -37,23 +37,25 @@ def HeroViewSet(request):
         # l = p-1
         # print(queryset[l])
 
+    
+
     elif request.method == 'POST':
-        serializer = data=request.data
-        print(serializer)
-        phone_number = serializer.get("phoneNumber")
-        session_id = serializer.get("sessionid")
-        service_code = serializer.get("serviceCode")
-        text = serializer.get("text")
-        print(phone_number)
+        serializer = HeroSerializer(data=request.data)
+        # print(serializer)
+        # phone_number = serializer.get("phoneNumber")
+        # session_id = serializer.get("sessionid")
+        # service_code = serializer.get("serviceCode")
+        # text = serializer.get("text")
+        # print(phone_number)
 
-        # if serializer.is_valid():
-        #     # serializer.save()
+        if serializer.is_valid():
+            serializer.save()
 
-        #     # x = serializer.get("phone_number")
-        #     print(serializer)
+            # x = serializer.get("phone_number")
+            print(serializer)
             
-            # return Response(serializer.data, status=status.HTTP_201_CREATED)
-        return Response( status=status.HTTP_201_CREATED)
+            return Response(serializer.data, status=status.HTTP_201_CREATED)
+        return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
       
 
    
