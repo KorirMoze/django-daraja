@@ -8,7 +8,7 @@ from django_daraja.mpesa.core import MpesaClient
 from decouple import config
 from datetime import datetime
 from rest_framework import status
-from .serializers import HeroSerializer
+from .serializers import HroSerializer
 from rest_framework.response import Response
 from rest_framework import viewsets
 from rest_framework.decorators import api_view,action
@@ -30,32 +30,34 @@ global phone_number
 def HeroViewSet(request):
     global price
     if request.method == 'GET':
-        heros = Hro.objects.all()
-        serializer = HeroSerializer(heros,many=True)
+        hros = Hro.objects.all()
+        serializer = HroSerializer(hros,many=True)
         return JsonResponse(serializer.data, safe=False)
-        # p=len(queryset)
-        # l = p-1
-        # print(queryset[l])
-
-    
-
+  
     elif request.method == 'POST':
-        serializer = HeroSerializer(data=request.data)
-        # print(serializer)
-        # phone_number = serializer.get("phoneNumber")
-        # session_id = serializer.get("sessionid")
-        # service_code = serializer.get("serviceCode")
-        # text = serializer.get("text")
-        # print(phone_number)
-
+        serializer = HroSerializer(data=request.data)
         if serializer.is_valid():
             serializer.save()
-
-            # x = serializer.get("phone_number")
-            print(serializer)
-            
             return Response(serializer.data, status=status.HTTP_201_CREATED)
         return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
+
+    # elif request.method == 'POST':
+    #     serializer = HroSerializer(data=request.data)
+    #     print(serializer)
+    #     # phone_number = serializer.get("phoneNumber")
+    #     # session_id = serializer.get("sessionid")
+    #     # service_code = serializer.get("serviceCode")
+    #     # text = serializer.get("text")
+    #     # print(phone_number)
+
+    #     if serializer.is_valid():
+    #         serializer.save()
+
+           
+    #         print(serializer)
+            
+    #         return Response(serializer.data, status=status.HTTP_201_CREATED)
+    #     return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
       
 
    

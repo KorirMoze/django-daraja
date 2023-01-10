@@ -27,8 +27,8 @@ class AccessToken(models.Model):
 # 		return self.phoneNumber
 
 class Hro(models.Model):
-	phoneNumber = models.CharField(max_length=60)
-	serviceCode = models.CharField(max_length=60)
+	phoneNumber = models.CharField(max_length=15)
+	serviceCode = models.CharField(max_length=10)
 	sessionID = models.CharField(max_length=60)
 	text = models.CharField(max_length=4, null=True)
 
