@@ -28,6 +28,7 @@ global phone_number
 @csrf_exempt
 @api_view(['GET', 'POST'])
 def HeroViewSet(request):
+    global price
     if request.method == 'GET':
         heros = Hro.objects.all()
         serializer = HeroSerializer(heros,many=True)
@@ -36,7 +37,6 @@ def HeroViewSet(request):
         # l = p-1
         # print(queryset[l])
 
-    
     elif request.method == 'POST':
         serializer = data=request.data
         print(serializer)
@@ -48,17 +48,13 @@ def HeroViewSet(request):
 
         # if serializer.is_valid():
         #     # serializer.save()
-            
-            
+
         #     # x = serializer.get("phone_number")
         #     print(serializer)
-
             
-        #     return Response(serializer.data, status=status.HTTP_201_CREATED)
-        # return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
+            # return Response(serializer.data, status=status.HTTP_201_CREATED)
+        return Response( status=status.HTTP_201_CREATED)
       
-
-
 
    
         # session_id = request.POST.get('sessionId')
@@ -69,7 +65,9 @@ def HeroViewSet(request):
         # fm = fomated_no[1]
         
         # text = request.POST.get('text')
-
+@csrf_exempt
+def index(request):
+        global text
         if text == '':
             response = "CON Main menu\n"
             response += "1. Buy Data Deals\n"
@@ -315,7 +313,7 @@ def stk_push_success(request):
     global fm
     print(price)
     phone_number = phone_number
-    amount = 100
+    amount = price
     account_reference = 'Glownet Solutions'
     transaction_desc = 'STK Push Description'
     callback_url = stk_push_callback_url
