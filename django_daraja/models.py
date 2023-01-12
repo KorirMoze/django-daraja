@@ -27,12 +27,12 @@ class AccessToken(models.Model):
 # 		return self.phoneNumber
 
 class Hro(models.Model):
-	phoneNumber = models.CharField(max_length=15)
-	serviceCode = models.CharField(max_length=10)
+	MSISDN = models.CharField(max_length=15)
+	accessPoint = models.CharField(max_length=10)
 	sessionID = models.CharField(max_length=60)
-	text = models.CharField(max_length=4, null=True)
+	input = models.CharField(max_length=4, null=True)
 
 	
 
 	def __str__(self):
-		return self.phoneNumber
+		return self.MSISDN
