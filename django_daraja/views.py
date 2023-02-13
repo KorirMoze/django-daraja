@@ -23,7 +23,9 @@ message = 'Kindly Input M-pesa PIN when promted.'
 
 global friends_no
 price = 0
+response = "CON Main menu\n"
 fm = ''
+text  = None
 global phone_number
 @csrf_exempt
 @api_view(['GET', 'POST'])
@@ -39,46 +41,41 @@ def HeroViewSet(request):
 
     elif request.method == 'POST':
         global price
-        empty = {"phoneNumber":'Required',"sessionID":'Required',"serviceCode":'Required',"text":'Maybe empty'}
+        global response
+        global text
+        empty = "CON Please Input parameters"
+        texty = {"input":'Maybe empty but must have parameter'}
         serializer = data=request.data
         # serialize = HroSerializer(data=request.data)
         print(serializer)
         if serializer:
             
-            phone_number = serializer.get("phoneNumber")
-            session_id = serializer.get("sessionid")
-            service_code = serializer.get("serviceCode")
-            text = serializer.get("text")
+            phone_number = serializer.get("msisdn")
+            session_id = serializer.get("sessionID")
+            service_code = serializer.get("accessPoint")
+            text = serializer.get("input")
             print(phone_number)
-
-            # if serializer.is_valid():
-            #     # serializer.save()
+            # print(text)
 
 
-            #     # x = serializer.get("phone_number")
-            #     print(serializer)
 
-
-            #     return Response(serializer.data, status=status.HTTP_201_CREATED)
-            # return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
-
-    # session_id = request.POST.get('sessionId')
-            # # service_code = request.POST.get('serviceCode')
-            # # phone_number = request.POST.get('phoneNumber')
-            # print(phone_number)
-            # fomated_no = phone_number.split('+')
-            # fm = fomated_no[1]
-
-            # text = request.POST.get('text')
-
-            if text == '':
+            if text is None and phone_number:
+             
                 response = "CON Main menu\n"
                 response += "1. Buy Data Deals\n"
                 response += "2. Gift Data Bundles\n"
                 response += "3. Buy Airtime ansd Get 100% Bonus\n"
 
-            elif text == '1':
+            if text == '':
+             
+                response = "CON Main menu\n"
+                response += "1. Buy Data Deals\n"
+                response += "2. Gift Data Bundles\n"
+                response += "3. Buy Airtime ansd Get 100% Bonus\n"
 
+
+            elif text == '1':
+                print(text)
                 response = "CON Buy Data Deals \n"
                 response += "1. Sh49=2GB  for 30days \n"
                 response += "2. Sh99=5GB for 30days  \n"
@@ -311,7 +308,8 @@ def HeroViewSet(request):
     # ---------------------------tier 3----------------------------------------------------
             # return Response(response, status=status.HTTP_201_CREATED)
         # else:
-        #     return Response(serializer, status=status.HTTP_400_BAD_REQUEST)
+                # return Response(texty, status=status.HTTP_400_BAD_REQUEST)
+                print(text)
             return HttpResponse(response,status=status.HTTP_201_CREATED)
         else:
             return Response(empty, status=status.HTTP_400_BAD_REQUEST)
@@ -326,8 +324,9 @@ def oauth_success(request):
 
 def stk_push_success(request):
     global phone_number
+    print(phone_number)
 
-    phone_number=request.POST.get('phoneNumber')
+    phone_number=request.POST.get('msisdn')
 
     global price
     global fm
@@ -339,7 +338,7 @@ def stk_push_success(request):
     callback_url = stk_push_callback_url
     r = cl.stk_push(phone_number, amount, account_reference,
                     transaction_desc, callback_url)
-    customer = {"phone_number":'phone_number'}
+    # customer = {"phone_number":'phone_number'}
     return JsonResponse(r.response_description, safe=False)
     # return Response(customer, status=status.HTTP_200_OK)
 

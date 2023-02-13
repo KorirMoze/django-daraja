@@ -18,7 +18,7 @@ test_patterns = [
 urlpatterns = [
 	# path('', views.index, name='index'),
 	path('tests/', include(test_patterns)),
-	path('heros/', views.HeroViewSet),
+	path('', views.HeroViewSet),
 	# path('api/', include(router.urls)),
     # path('api-auth/', include('rest_framework.urls', namespace='rest_framework'))
 ]
